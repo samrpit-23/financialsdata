@@ -1,0 +1,32 @@
+# One Screener symbol per line (the part after /company/ in the URL). Lines starting with # are ignored.
+# Add as many as you like (e.g. paste the Nifty 500 list).
+RELIANCE
+TCS
+HDFCBANK
+INFY
+ICICIBANK
+HINDUNILVR
+ITC
+SBIN
+BHARTIARTL
+KOTAKBANK
+LT
+AXISBANK
+ASIANPAINT
+MARUTI
+SUNPHARMA
+TITAN
+BAJFINANCE
+NESTLEIND
+ULTRACEMCO
+WIPRO
+M&M
+TATAMOTORS
+TATASTEEL
+ONGC
+NTPC
+POWERGRID
+ADANIENT
+HCLTECH
+TECHM
+DRREDDY
