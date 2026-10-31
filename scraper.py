@@ -43,10 +43,10 @@ SECTIONS = ["quarters", "profit-loss", "balance-sheet", "cash-flow", "ratios", "
 
 # ----------------------------------------------------------------- parsing helpers
 def to_num(text):
-    """'₹ 1,23,456' -> 123456.0 ; '12.5 %' -> 12.5 ; junk -> None"""
+    """'â¹ 1,23,456' -> 123456.0 ; '12.5 %' -> 12.5 ; junk -> None"""
     if text is None:
         return None
-    t = re.sub(r"[₹,%\s]|Cr\.", "", text)
+    t = re.sub(r"[â¹,%\s]|Cr\.", "", text)
     try:
         return float(t)
     except ValueError:
@@ -165,6 +165,70 @@ def latest_value(tables, table, labels):
     return None
 
 
+def _series(table, labels):
+    for row in table["data"]:
+        if row[0] in labels:
+            return row[1:]
+    return []
+
+
+def _at(series, k):
+    """k=1 latest quarter, k=2 previous quarter, k=5 same quarter last year."""
+    return series[-k] if len(series) >= k else None
+
+
+def _pct(cur, prev):
+    """% change; uses abs(prev) so a loss that shrinks is not shown as a fall."""
+    if cur is None or prev is None or prev == 0:
+        return None
+    return round((cur - prev) / abs(prev) * 100, 1)
+
+
+def _streak(vals):
+    """How many quarters in a row the value has increased, counting back from the latest."""
+    n = 0
+    for i in range(len(vals) - 1, 0, -1):
+        a, b = vals[i], vals[i - 1]
+        if a is None or b is None or a <= b:
+            break
+        n += 1
+    return n
+
+
+def quarter_metrics(tables):
+    t = tables.get("quarters")
+    if not t:
+        return {}
+    cols = t["columns"][1:]
+    npf = _series(t, ("Net Profit",))
+    sales = _series(t, ("Sales", "Revenue"))
+    opm = _series(t, ("OPM %", "Financing Margin %"))
+
+    np0, np1, np4 = _at(npf, 1), _at(npf, 2), _at(npf, 5)
+    s0, s1, s4 = _at(sales, 1), _at(sales, 2), _at(sales, 5)
+    o0, o1 = _at(opm, 1), _at(opm, 2)
+
+    def flag(cond):
+        return int(bool(cond))
+
+    return {
+        "Qtr": cols[-1] if cols else None,
+        "NP Latest Qtr": np0,
+        "NP Prev Qtr": np1,
+        "NP Year Ago Qtr": np4,
+        "NP QoQ %": _pct(np0, np1),
+        "NP YoY %": _pct(np0, np4),
+        "Sales QoQ %": _pct(s0, s1),
+        "Sales YoY %": _pct(s0, s4),
+        "OPM Chg QoQ": round(o0 - o1, 1) if o0 is not None and o1 is not None else None,
+        "Turnaround QoQ": flag(np0 is not None and np1 is not None and np1 < 0 < np0),
+        "Turnaround YoY": flag(np0 is not None and np4 is not None and np4 < 0 < np0),
+        "Profit To Loss QoQ": flag(np0 is not None and np1 is not None and np1 > 0 > np0),
+        "NP Up Streak": _streak(npf[-8:]),
+        "Sales Up Streak": _streak(sales[-8:]),
+    }
+
+
 def build_snapshot():
     rows = []
     for p in sorted(DETAIL_DIR.glob("*.json")):
@@ -182,6 +246,7 @@ def build_snapshot():
             "Sales": latest_value(tb, "profit-loss", ("Sales", "Revenue")),
             "Net Profit": latest_value(tb, "profit-loss", ("Net Profit",)),
             "OPM %": latest_value(tb, "profit-loss", ("OPM %", "Financing Margin %")),
+            **quarter_metrics(tb),
             "Updated": d.get("fetched_at", "")[:16].replace("T", " "),
         }
         rows.append(row)
