@@ -124,9 +124,16 @@ def run_filter(q: pd.DataFrame, expr: str, sort_by=None, ascending=False):
     return res.index
 
 
-def ask_claude(question: str, q: pd.DataFrame) -> dict:
-    key = get_secret("ANTHROPIC_API_KEY")
-    model = get_secret("ANTHROPIC_MODEL") or "claude-haiku-5-5"
+def ai_provider():
+    """Which AI key is configured in Streamlit Secrets: 'gemini', 'anthropic' or None."""
+    if get_secret("GEMINI_API_KEY"):
+        return "gemini"
+    if get_secret("ANTHROPIC_API_KEY"):
+        return "anthropic"
+    return None
+
+
+def ask_ai(question: str, q: pd.DataFrame) -> dict:
     cols = "\n".join(f"- {c}: {GLOSSARY.get(c, '')}" for c in q.columns)
     sectors = ", ".join(sorted(s for s in q["sector"].dropna().unique() if s)[:80]) if "sector" in q else ""
     system = f"""You turn a user's question about Indian stocks into a filter for a pandas DataFrame.
@@ -143,14 +150,33 @@ Rules:
 - 'Turned positive from negative' -> turnaround_qoq == 1 (quarter on quarter) or turnaround_yoy == 1 (year on year).
 - If the question cannot be answered with these columns, return {{"error": "short reason"}}.
 Reply with ONLY a JSON object: {{"query": "...", "sort_by": "<column or null>", "ascending": false, "explain": "one short sentence"}}"""
-    r = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-        json={"model": model, "max_tokens": 400, "system": system, "messages": [{"role": "user", "content": question}]},
-        timeout=45,
-    )
-    r.raise_for_status()
-    text = "".join(b.get("text", "") for b in r.json()["content"] if b.get("type") == "text")
+    if ai_provider() == "gemini":
+        model = get_secret("GEMINI_MODEL") or "gemini-2.5-flash-lite"
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+            headers={"x-goog-api-key": get_secret("GEMINI_API_KEY"), "content-type": "application/json"},
+            json={
+                "systemInstruction": {"parts": [{"text": system}]},
+                "contents": [{"role": "user", "parts": [{"text": question}]}],
+                "generationConfig": {"maxOutputTokens": 800, "temperature": 0},
+            },
+            timeout=45,
+        )
+        r.raise_for_status()
+        parts = r.json()["candidates"][0]["content"]["parts"]
+        text = "".join(p.get("text", "") for p in parts)
+    else:
+        model = get_secret("ANTHROPIC_MODEL") or "claude-haiku-5-5"
+        r = requests.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={"x-api-key": get_secret("ANTHROPIC_API_KEY"), "anthropic-version": "2023-06-01",
+                     "content-type": "application/json"},
+            json={"model": model, "max_tokens": 400, "system": system,
+                  "messages": [{"role": "user", "content": question}]},
+            timeout=45,
+        )
+        r.raise_for_status()
+        text = "".join(b.get("text", "") for b in r.json()["content"] if b.get("type") == "text")
     m = re.search(r"\{.*\}", text, re.S)
     if not m:
         raise ValueError("AI reply was not understood")
@@ -277,10 +303,11 @@ with tab_ask:
                 st.error(str(e))
 
         elif mode.startswith("🤖"):
-            if not get_secret("ANTHROPIC_API_KEY"):
+            if not ai_provider():
                 st.info(
-                    "AI search needs an Anthropic API key. Add `ANTHROPIC_API_KEY` in your Streamlit app → "
-                    "Settings → Secrets (steps are in the chat). Until then, use Quick screens or Custom filter."
+                    "AI search needs an API key. In your Streamlit app go to Settings → Secrets and add "
+                    "`GEMINI_API_KEY = \"your-key\"` (free) or `ANTHROPIC_API_KEY = \"your-key\"`. "
+                    "Until then, use Quick screens or Custom filter."
                 )
             else:
                 question = st.text_input(
@@ -294,7 +321,7 @@ with tab_ask:
                     else:
                         try:
                             with st.spinner("Thinking..."):
-                                st.session_state["ai_result"] = ask_claude(question, q)
+                                st.session_state["ai_result"] = ask_ai(question, q)
                         except Exception as e:
                             st.session_state["ai_result"] = {"error": f"AI request failed: {e}"}
 
