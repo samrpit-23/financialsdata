@@ -1,30 +1,30 @@
-Symbol,Name,Sector,Industry,Market Cap,Current Price,52w High,52w Low,Stock P/E,Book Value,Dividend Yield,ROCE,ROE,Face Value,Sales,Net Profit,OPM %,Updated
-RELIANCE,Reliance Industries Ltd,Energy,Refineries & Marketing,1574578.0,1164.0,1612.0,1152.0,21.1,668.0,0.51,10.3,8.91,10.0,1123055.0,88167.0,16.0,2026-10-30 10:55
-BHARTIARTL,Bharti Airtel Ltd,Telecommunication,Telecom - Cellular & Fixed line services,1229598.0,1970.0,2175.0,1726.0,39.4,245.0,1.21,17.6,20.3,5.0,220049.0,36413.0,57.0,2026-10-30 10:55
-HDFCBANK,HDFC Bank Ltd,Financial Services,Private Sector Bank,1068062.0,692.0,1018.0,669.0,13.4,391.0,1.9,7.02,13.6,1.0,359956.0,83685.0,-10.0,2026-10-30 10:55
-ICICIBANK,ICICI Bank Ltd,Financial Services,Private Sector Bank,1001028.0,1394.0,1480.0,1188.0,17.0,540.0,0.87,7.18,15.9,2.0,206190.0,62827.0,-19.0,2026-10-30 10:55
-TCS,Tata Consultancy Services Ltd,Information Technology,Computers - Software & Consulting,903075.0,2496.0,3350.0,1976.0,16.5,329.0,2.55,63.0,51.8,1.0,283248.0,51858.0,26.0,2026-10-30 10:55
-SBIN,State Bank of India,Financial Services,Public Sector Bank,887077.0,961.0,1235.0,930.0,10.5,674.0,1.78,6.13,15.4,1.0,525747.0,89665.0,-16.0,2026-10-30 10:55
-BAJFINANCE,Bajaj Finance Ltd,Financial Services,Non Banking Financial Company (NBFC),584741.0,939.0,1178.0,788.0,26.6,198.0,0.58,10.9,18.2,1.0,90331.0,22066.0,34.0,2026-10-30 10:55
-LT,Larsen & Toubro Ltd,Industrials,Civil Construction,530829.0,3858.0,4440.0,3288.0,28.1,821.0,0.99,14.6,15.9,2.0,300904.0,20895.0,12.0,2026-10-30 10:55
-INFY,Infosys Ltd,Information Technology,Computers - Software & Consulting,479690.0,1182.0,1728.0,980.0,15.2,244.0,4.06,40.0,31.9,5.0,189336.0,30788.0,24.0,2026-10-30 10:55
-KOTAKBANK,Kotak Mahindra Bank Ltd,Financial Services,Private Sector Bank,458597.0,461.0,463.0,345.0,21.6,196.0,0.14,6.98,11.4,1.0,73545.0,21473.0,-18.0,2026-10-30 10:55
-HINDUNILVR,Hindustan Unilever Ltd,Fast Moving Consumer Goods,Diversified FMCG,437964.0,1864.0,2480.0,1758.0,39.1,208.0,2.21,28.4,31.0,1.0,68359.0,15073.0,23.0,2026-10-30 10:55
-SUNPHARMA,Sun Pharmaceutical Industries Ltd,Healthcare,Pharmaceuticals,426662.0,1778.0,2048.0,1584.0,33.7,348.0,0.91,20.5,16.0,1.0,59911.0,12117.0,30.0,2026-10-30 10:55
-TITAN,Titan Company Ltd,Consumer Discretionary,"Gems, Jewellery And Watches",394887.0,4448.0,5187.0,3667.0,67.7,177.0,0.34,20.5,37.7,1.0,92417.0,5760.0,10.0,2026-10-30 10:55
-HCLTECH,HCL Technologies Ltd,Information Technology,Computers - Software & Consulting,387511.0,1428.0,1780.0,1030.0,20.4,280.0,3.81,30.4,23.8,2.0,138052.0,18330.0,21.0,2026-10-30 10:56
-AXISBANK,Axis Bank Ltd,Financial Services,Private Sector Bank,378267.0,1215.0,1418.0,1150.0,12.6,738.0,0.08,6.24,13.1,2.0,141510.0,30038.0,5.0,2026-10-30 10:55
-MARUTI,Maruti Suzuki India Ltd,Consumer Discretionary,Passenger Cars & Utility Vehicles,358828.0,11413.0,17372.0,10984.0,26.7,3467.0,1.23,18.9,14.3,5.0,208192.0,13451.0,10.0,2026-10-30 10:55
-M&M,Mahindra & Mahindra Ltd,Consumer Discretionary,Passenger Cars & Utility Vehicles,353660.0,2844.0,3840.0,2743.0,18.4,749.0,1.14,15.1,20.3,5.0,211375.0,20243.0,19.0,2026-10-30 10:56
-ADANIENT,Adani Enterprises Ltd,Commodities,Trading - Minerals,348914.0,2578.0,3245.0,1753.0,108.0,724.0,0.05,5.8,4.48,1.0,127398.0,5319.0,14.0,2026-10-30 10:56
-ITC,ITC Ltd,Fast Moving Consumer Goods,Diversified FMCG,332848.0,266.0,426.0,253.0,16.9,57.9,5.4,38.9,29.3,1.0,76488.0,20184.0,34.0,2026-10-30 10:55
-ULTRACEMCO,UltraTech Cement Ltd,Commodities,Cement & Cement Products,325623.0,11050.0,13110.0,10325.0,36.7,2497.0,2.15,12.7,11.1,10.0,95572.0,8835.0,19.0,2026-10-30 10:55
-NTPC,NTPC Ltd,Utilities,Power Generation,306415.0,316.0,414.0,292.0,11.0,210.0,2.86,8.92,15.1,10.0,191059.0,28334.0,27.0,2026-10-30 10:56
-ONGC,Oil & Natural Gas Corpn Ltd,Energy,Oil Exploration & Production,284314.0,226.0,308.0,218.0,6.48,296.0,5.88,14.2,11.6,5.0,704123.0,44793.0,13.0,2026-10-30 10:56
-POWERGRID,Power Grid Corporation of India Ltd,Utilities,Power - Transmission,246001.0,264.0,325.0,242.0,15.5,108.0,3.4,9.1,15.3,10.0,47033.0,15896.0,73.0,2026-10-30 10:56
-NESTLEIND,Nestle India Ltd,Fast Moving Consumer Goods,Packaged Foods,225613.0,1170.0,1553.0,1147.0,56.7,30.0,1.01,85.3,74.2,1.0,25581.0,4078.0,24.0,2026-10-30 10:55
-ASIANPAINT,Asian Paints Ltd,Consumer Discretionary,Paints,222054.0,2315.0,2986.0,2115.0,44.9,227.0,1.17,26.3,21.8,1.0,38632.0,4904.0,19.0,2026-10-30 10:55
-TATASTEEL,Tata Steel Ltd,Commodities,Iron & Steel,209349.0,168.0,224.0,160.0,17.7,81.8,2.38,12.5,11.7,1.0,239756.0,11264.0,15.0,2026-10-30 10:56
-WIPRO,Wipro Ltd,Information Technology,Computers - Software & Consulting,196132.0,198.0,273.0,157.0,14.9,79.7,5.59,17.8,15.5,2.0,97023.0,13223.0,19.0,2026-10-30 10:55
-TECHM,Tech Mahindra Ltd,Information Technology,Computers - Software & Consulting,175672.0,1792.0,1854.0,1304.0,30.7,303.0,2.82,23.1,17.5,5.0,61361.0,5571.0,17.0,2026-10-30 10:56
-DRREDDY,Dr Reddys Laboratories Ltd,Healthcare,Pharmaceuticals,112698.0,1350.0,1415.0,1080.0,40.2,465.0,0.59,13.0,11.2,1.0,33097.0,2760.0,15.0,2026-10-30 10:56
+Symbol,Name,Sector,Industry,Market Cap,Current Price,52w High,52w Low,Stock P/E,Book Value,Dividend Yield,ROCE,ROE,Face Value,Sales,Net Profit,OPM %,Qtr,NP Latest Qtr,NP Prev Qtr,NP Year Ago Qtr,NP QoQ %,NP YoY %,Sales QoQ %,Sales YoY %,OPM Chg QoQ,Turnaround QoQ,Turnaround YoY,Profit To Loss QoQ,NP Up Streak,Sales Up Streak,Updated
+RELIANCE,Reliance Industries Ltd,Energy,Refineries & Marketing,1576405.0,1165.0,1612.0,1152.0,19.2,698.0,0.52,10.3,8.91,10.0,1199033.0,95625.0,16.0,Sep 2026,29550.0,23196.0,22092.0,27.4,33.8,6.8,29.8,2.0,0,0,0,2,5,2026-10-31 08:21
+BHARTIARTL,Bharti Airtel Ltd,Telecommunication,Telecom - Cellular & Fixed line services,1231907.0,1974.0,2175.0,1726.0,39.4,245.0,1.22,17.6,20.3,5.0,220049.0,36413.0,57.0,Jun 2026,10012.0,9247.0,7422.0,8.3,34.9,5.7,18.3,0.0,0,0,0,2,7,2026-10-31 08:22
+HDFCBANK,HDFC Bank Ltd,Financial Services,Private Sector Bank,1068834.0,693.0,1018.0,669.0,13.3,391.0,1.88,7.02,13.6,1.0,359956.0,83685.0,-10.0,Sep 2026,21537.0,20383.0,20364.0,5.7,5.8,5.0,9.4,11.0,0,0,0,1,4,2026-10-31 08:21
+ICICIBANK,ICICI Bank Ltd,Financial Services,Private Sector Bank,1003901.0,1398.0,1480.0,1188.0,17.0,540.0,0.86,7.18,15.9,2.0,206190.0,62827.0,-19.0,Sep 2026,17389.0,16276.0,14318.0,6.8,21.4,7.2,16.2,-4.0,0,0,0,3,4,2026-10-31 08:22
+TCS,Tata Consultancy Services Ltd,Information Technology,Computers - Software & Consulting,905463.0,2503.0,3350.0,1976.0,16.6,329.0,2.56,63.0,51.8,1.0,283248.0,51858.0,26.0,Sep 2026,13934.0,13420.0,12131.0,3.8,14.9,1.3,11.2,0.0,0,0,0,1,5,2026-10-31 08:21
+SBIN,State Bank of India,Financial Services,Public Sector Bank,887861.0,962.0,1235.0,934.0,10.6,674.0,1.8,6.13,15.4,1.0,525747.0,89665.0,-16.0,Jun 2026,25121.0,20508.0,22121.0,22.5,13.6,3.9,8.4,10.0,0,0,0,1,4,2026-10-31 08:22
+BAJFINANCE,Bajaj Finance Ltd,Financial Services,Non Banking Financial Company (NBFC),584679.0,939.0,1178.0,788.0,26.7,198.0,0.58,10.9,18.2,1.0,90331.0,22066.0,34.0,Sep 2026,6367.0,6081.0,4948.0,4.7,28.7,6.0,22.8,0.0,0,0,0,3,7,2026-10-31 08:22
+LT,Larsen & Toubro Ltd,Industrials,Civil Construction,532713.0,3872.0,4440.0,3288.0,28.2,821.0,0.98,14.6,15.9,2.0,300904.0,20895.0,12.0,Sep 2026,5949.0,4988.0,4678.0,19.3,27.2,15.9,15.8,-1.0,0,0,0,1,1,2026-10-31 08:22
+INFY,Infosys Ltd,Information Technology,Computers - Software & Consulting,480908.0,1185.0,1728.0,980.0,15.2,244.0,4.05,40.0,31.9,5.0,189336.0,30788.0,24.0,Sep 2026,7838.0,7775.0,7375.0,0.8,6.3,2.1,10.7,0.0,0,0,0,1,6,2026-10-31 08:22
+KOTAKBANK,Kotak Mahindra Bank Ltd,Financial Services,Private Sector Bank,459194.0,462.0,463.0,345.0,21.6,196.0,0.14,6.98,11.4,1.0,73545.0,21473.0,-18.0,Sep 2026,5645.0,5480.0,4468.0,3.0,26.3,8.2,15.4,13.0,0,0,0,4,4,2026-10-31 08:22
+HINDUNILVR,Hindustan Unilever Ltd,Fast Moving Consumer Goods,Diversified FMCG,438105.0,1865.0,2480.0,1758.0,39.1,208.0,2.2,28.4,31.0,1.0,68359.0,15073.0,23.0,Sep 2026,2796.0,2680.0,2694.0,4.3,3.8,5.1,14.5,-1.0,0,0,0,1,2,2026-10-31 08:22
+SUNPHARMA,Sun Pharmaceutical Industries Ltd,Healthcare,Pharmaceuticals,426530.0,1778.0,2048.0,1584.0,34.7,372.0,0.9,20.5,16.0,1.0,61631.0,10987.0,29.0,Sep 2026,1995.0,2901.0,3125.0,-31.2,-36.2,5.9,11.9,0.0,0,0,0,0,2,2026-10-31 08:22
+TITAN,Titan Company Ltd,Consumer Discretionary,"Gems, Jewellery And Watches",393866.0,4436.0,5187.0,3667.0,67.5,177.0,0.34,20.5,37.7,1.0,92417.0,5760.0,10.0,Jun 2026,1777.0,1179.0,1091.0,50.7,62.9,-20.7,29.3,7.0,0,0,0,1,0,2026-10-31 08:22
+HCLTECH,HCL Technologies Ltd,Information Technology,Computers - Software & Consulting,387539.0,1428.0,1780.0,1030.0,20.4,280.0,3.78,30.4,23.8,2.0,138052.0,18330.0,21.0,Sep 2026,5132.0,4626.0,4236.0,10.9,21.2,3.0,11.5,1.0,0,0,0,3,7,2026-10-31 08:22
+AXISBANK,Axis Bank Ltd,Financial Services,Private Sector Bank,378983.0,1217.0,1418.0,1150.0,12.6,738.0,0.08,6.24,13.1,2.0,141510.0,30038.0,5.0,Sep 2026,7666.0,7670.0,5567.0,-0.1,37.7,7.2,17.9,0.0,0,0,0,0,4,2026-10-31 08:22
+MARUTI,Maruti Suzuki India Ltd,Consumer Discretionary,Passenger Cars & Utility Vehicles,358325.0,11397.0,17372.0,10984.0,26.6,3467.0,1.23,18.9,14.3,5.0,208192.0,13451.0,10.0,Sep 2026,2466.0,3447.0,3349.0,-28.5,-26.4,1.7,26.0,1.0,0,0,0,0,5,2026-10-31 08:22
+M&M,Mahindra & Mahindra Ltd,Consumer Discretionary,Passenger Cars & Utility Vehicles,353199.0,2840.0,3840.0,2743.0,18.4,749.0,1.16,15.1,20.3,5.0,211375.0,20243.0,19.0,Jun 2026,5998.0,5260.0,4377.0,14.0,37.0,5.8,27.8,1.0,0,0,0,3,7,2026-10-31 08:22
+ADANIENT,Adani Enterprises Ltd,Commodities,Trading - Minerals,349104.0,2579.0,3245.0,1753.0,109.0,724.0,0.05,5.8,4.48,1.0,127398.0,5319.0,14.0,Sep 2026,1221.0,-1462.0,3414.0,183.5,-64.2,13.0,75.1,0.0,1,0,0,1,4,2026-10-31 08:22
+ITC,ITC Ltd,Fast Moving Consumer Goods,Diversified FMCG,332848.0,266.0,422.0,253.0,16.8,57.9,5.46,38.9,29.3,1.0,76488.0,20184.0,34.0,Jun 2026,4509.0,5470.0,5343.0,-17.6,-15.6,7.2,-11.1,-12.0,0,0,0,0,1,2026-10-31 08:22
+ULTRACEMCO,UltraTech Cement Ltd,Commodities,Cement & Cement Products,325473.0,11045.0,13110.0,10325.0,36.6,2497.0,2.17,12.7,11.1,10.0,95572.0,8835.0,19.0,Sep 2026,1501.0,2604.0,1238.0,-42.4,21.2,-5.5,18.8,-4.0,0,0,0,0,0,2026-10-31 08:22
+NTPC,NTPC Ltd,Utilities,Power Generation,306657.0,316.0,414.0,292.0,11.0,210.0,2.85,8.92,15.1,10.0,191059.0,28334.0,27.0,Jun 2026,6896.0,10615.0,6108.0,-35.0,12.9,2.1,7.8,15.0,0,0,0,0,3,2026-10-31 08:22
+ONGC,Oil & Natural Gas Corpn Ltd,Energy,Oil Exploration & Production,283547.0,225.0,308.0,218.0,6.49,296.0,5.88,14.2,11.6,5.0,704123.0,44793.0,13.0,Jun 2026,6554.0,13678.0,11554.0,-52.1,-43.3,17.9,25.7,-7.0,0,0,0,0,3,2026-10-31 08:22
+POWERGRID,Power Grid Corporation of India Ltd,Utilities,Power - Transmission,246466.0,265.0,325.0,242.0,15.5,108.0,3.4,9.1,15.3,10.0,47033.0,15896.0,73.0,Jun 2026,3598.0,4546.0,3631.0,-20.9,-0.9,-1.4,2.7,37.0,0,0,0,0,0,2026-10-31 08:22
+NESTLEIND,Nestle India Ltd,Fast Moving Consumer Goods,Packaged Foods,225034.0,1167.0,1553.0,1147.0,56.6,30.0,1.03,85.3,74.2,1.0,25581.0,4078.0,24.0,Sep 2026,1010.0,959.0,743.0,5.3,35.9,6.4,20.3,0.0,0,0,0,1,1,2026-10-31 08:22
+ASIANPAINT,Asian Paints Ltd,Consumer Discretionary,Paints,222534.0,2320.0,2986.0,2115.0,45.0,227.0,1.19,26.3,21.8,1.0,38632.0,4904.0,19.0,Sep 2026,1085.0,1559.0,1018.0,-30.4,6.6,-5.4,16.9,-5.0,0,0,0,0,0,2026-10-31 08:22
+TATASTEEL,Tata Steel Ltd,Commodities,Iron & Steel,209224.0,168.0,224.0,160.0,17.7,81.8,2.39,12.5,11.7,1.0,239756.0,11264.0,15.0,Jun 2026,2385.0,2965.0,2007.0,-19.6,18.8,-3.9,14.3,-1.0,0,0,0,0,0,2026-10-31 08:22
+WIPRO,Wipro Ltd,Information Technology,Computers - Software & Consulting,196439.0,198.0,273.0,157.0,14.9,79.7,5.55,17.8,15.5,2.0,97023.0,13223.0,19.0,Sep 2026,3200.0,3356.0,3262.0,-4.6,-1.9,1.1,9.1,1.0,0,0,0,0,5,2026-10-31 08:22
+TECHM,Tech Mahindra Ltd,Information Technology,Computers - Software & Consulting,175535.0,1791.0,1854.0,1304.0,30.7,303.0,2.85,23.1,17.5,5.0,61361.0,5571.0,17.0,Sep 2026,1610.0,1486.0,1202.0,8.3,33.9,3.0,15.6,1.0,0,0,0,3,5,2026-10-31 08:22
+DRREDDY,Dr Reddys Laboratories Ltd,Healthcare,Pharmaceuticals,112849.0,1352.0,1415.0,1080.0,40.3,465.0,0.59,13.0,11.2,1.0,33097.0,2760.0,15.0,Sep 2026,913.0,436.0,1337.0,109.4,-31.7,7.4,-1.5,9.0,0,0,0,2,2,2026-10-31 08:22
