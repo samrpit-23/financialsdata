@@ -151,20 +151,31 @@ Rules:
 - If the question cannot be answered with these columns, return {{"error": "short reason"}}.
 Reply with ONLY a JSON object: {{"query": "...", "sort_by": "<column or null>", "ascending": false, "explain": "one short sentence"}}"""
     if ai_provider() == "gemini":
-        model = get_secret("GEMINI_MODEL") or "gemini-2.5-flash-lite"
-        r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-            headers={"x-goog-api-key": get_secret("GEMINI_API_KEY"), "content-type": "application/json"},
-            json={
-                "systemInstruction": {"parts": [{"text": system}]},
-                "contents": [{"role": "user", "parts": [{"text": question}]}],
-                "generationConfig": {"maxOutputTokens": 800, "temperature": 0},
-            },
-            timeout=45,
-        )
-        r.raise_for_status()
-        parts = r.json()["candidates"][0]["content"]["parts"]
-        text = "".join(p.get("text", "") for p in parts)
+        # Google retires models often, so try the configured one first, then current fallbacks.
+        candidates = [m for m in [get_secret("GEMINI_MODEL"), "gemini-3.1-flash-lite", "gemini-3.5-flash",
+                                  "gemini-3-flash-preview"] if m]
+        text, last_err = None, ""
+        for model in candidates:
+            r = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                headers={"x-goog-api-key": get_secret("GEMINI_API_KEY"), "content-type": "application/json"},
+                json={
+                    "systemInstruction": {"parts": [{"text": system}]},
+                    "contents": [{"role": "user", "parts": [{"text": question}]}],
+                    "generationConfig": {"maxOutputTokens": 800, "temperature": 0},
+                },
+                timeout=45,
+            )
+            if r.status_code == 404:  # model retired / not available -> try next one
+                last_err = f"{model}: not found"
+                continue
+            if r.status_code >= 400:
+                raise ValueError(f"Gemini error {r.status_code}: {r.text[:300]}")
+            parts = r.json()["candidates"][0]["content"]["parts"]
+            text = "".join(p.get("text", "") for p in parts)
+            break
+        if text is None:
+            raise ValueError(f"No Gemini model worked ({last_err}). Set GEMINI_MODEL in Secrets to a current model id.")
     else:
         model = get_secret("ANTHROPIC_MODEL") or "claude-haiku-5-5"
         r = requests.post(
