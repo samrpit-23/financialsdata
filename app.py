@@ -52,6 +52,30 @@ GLOSSARY = {
     "profit_to_loss_qoq": "1 if net profit was positive last quarter and is negative now, else 0",
     "np_up_streak": "Number of consecutive quarters net profit has increased (latest backwards)",
     "sales_up_streak": "Number of consecutive quarters sales has increased",
+    "sales_cagr_5y": "Sales compound growth % per year over 5 years",
+    "profit_cagr_5y": "Net profit compound growth % per year over 5 years",
+    "eps_cagr_5y": "EPS compound growth % per year over 5 years",
+    "sales_cagr_3y": "Sales CAGR % over 3 years",
+    "profit_cagr_3y": "Net profit CAGR % over 3 years",
+    "sales_up_years_5y": "How many of the last 5 years sales increased (0-5)",
+    "profit_up_years_5y": "How many of the last 5 years net profit increased (0-5)",
+    "opm_chg_3y": "Change in operating margin over 3 years, percentage points (negative = margins falling)",
+    "roce_avg_5y": "Average ROCE % over last 5 years",
+    "roce_min_5y": "Lowest ROCE % in last 5 years",
+    "roe_avg_5y": "Average ROE % over last 5 years (profit / year-end net worth)",
+    "debt_to_equity": "Borrowings / (equity + reserves), latest year. Not meaningful for banks/NBFCs",
+    "debt_chg_3y": "% change in borrowings over 3 years",
+    "interest_coverage": "Operating profit / interest, latest year. 999 = no interest cost (debt free). Not meaningful for banks/NBFCs",
+    "cfo_to_profit_3y": "Operating cash flow / net profit over 3 years (1.0 = cash matches profit)",
+    "cfo_positive_years_5y": "Number of the last 5 years with positive operating cash flow",
+    "debtor_days_chg_3y": "Change in debtor (receivable) days over 3 years",
+    "inventory_days_chg_3y": "Change in inventory days over 3 years",
+    "payout_pct": "Dividend payout % of profit, latest year (100 - payout = retention)",
+    "promoter_holding": "Promoter holding %, latest quarter",
+    "promoter_chg_1y": "Change in promoter holding over 1 year, percentage points",
+    "pledged_pct": "Promoter shares pledged % (only when the page shows it; may be empty)",
+    "peg_3y": "P/E divided by 3-year profit CAGR (only when both positive)",
+    "pe_vs_sector": "Stock P/E divided by the median P/E of its sector (below 1 = cheaper than peers)",
 }
 
 # name -> (filter expression, sort column, ascending)
@@ -64,6 +88,15 @@ PRESETS = {
     "Net profit rising 3+ quarters in a row": ("np_up_streak >= 3", "np_up_streak", False),
     "Slipped from profit into loss (QoQ)": ("profit_to_loss_qoq == 1", "market_cap", False),
     "Quality + growth: ROCE>20, PE<25, profit up YoY": ("roce > 20 and pe > 0 and pe < 25 and np_yoy > 0", "roce", False),
+    "📘 Rulebook: growth (5Y sales & profit CAGR > 12%)": ("sales_cagr_5y > 12 and profit_cagr_5y > 12", "profit_cagr_5y", False),
+    "📘 Rulebook: returns + low debt (ROCE & ROE avg > 15, D/E < 1)": ("roce_avg_5y > 15 and roe_avg_5y > 15 and debt_to_equity < 1", "roce_avg_5y", False),
+    "📘 Rulebook: full financial-strength screen": ("sales_cagr_5y >= 12 and profit_cagr_5y >= 12 and roce_avg_5y >= 15 and debt_to_equity < 1 and interest_coverage > 4 and cfo_to_profit_3y >= 0.8 and opm_chg_3y >= -2", "profit_cagr_5y", False),
+    "📘 Rulebook: full screen + PEG < 1.5": ("sales_cagr_5y >= 12 and profit_cagr_5y >= 12 and roce_avg_5y >= 15 and debt_to_equity < 1 and interest_coverage > 4 and cfo_to_profit_3y >= 0.8 and peg_3y > 0 and peg_3y < 1.5", "peg_3y", True),
+    "📘 Quality at a cheaper price than sector peers": ("pe > 0 and pe_vs_sector < 0.8 and roce_avg_5y > 15 and profit_cagr_5y > 10", "pe_vs_sector", True),
+    "🚩 Red flag: debt up >30% in 3Y while profit grows <5%": ("debt_chg_3y > 30 and profit_cagr_3y < 5", "debt_chg_3y", False),
+    "🚩 Red flag: profits not turning into cash": ("cfo_to_profit_3y < 0.6", "cfo_to_profit_3y", True),
+    "🚩 Red flag: promoters selling or pledging": ("promoter_chg_1y < -2 or pledged_pct > 10", "promoter_chg_1y", True),
+    "🚩 Red flag: margins falling, receivables rising": ("opm_chg_3y < -3 and debtor_days_chg_3y > 15", "opm_chg_3y", True),
 }
 
 
@@ -75,6 +108,16 @@ def load_snapshot(mtime: float) -> pd.DataFrame:
         df["P/B"] = (df["Current Price"] / df["Book Value"]).where(df["Book Value"] > 0).round(2)
     if {"Current Price", "52w High"} <= set(df.columns):
         df["From 52w High %"] = ((df["Current Price"] / df["52w High"] - 1) * 100).round(1)
+    # columns that may be absent when no company has the data (keeps filters from erroring)
+    for c in ["Interest Coverage", "Debt to Equity", "Debt Chg 3Y %", "Pledged Pct"]:
+        if c not in df.columns:
+            df[c] = float("nan")
+    if {"Stock P/E", "Profit CAGR 3Y"} <= set(df.columns):
+        pe, g = df["Stock P/E"], df["Profit CAGR 3Y"]
+        df["PEG 3Y"] = (pe / g).where((pe > 0) & (g > 0)).round(2)
+    if "Stock P/E" in df.columns and "Sector" in df.columns:
+        pe = df["Stock P/E"].where(df["Stock P/E"] > 0)
+        df["PE vs Sector"] = (pe / pe.groupby(df["Sector"]).transform("median")).round(2)
     for c in FLAG_COLS:
         if c in df.columns:
             df[c] = df[c].fillna(0).astype(int)
@@ -110,7 +153,8 @@ def validate_expr(expr: str, cols: set):
     e = re.sub(r'"[^"\n]*"|\'[^\'\n]*\'', "0", expr)  # ignore text literals
     for w in re.findall(r"[A-Za-z_][A-Za-z_0-9]*", e):
         if w not in cols and w not in SAFE_WORDS:
-            raise ValueError(f"Unknown column or word: '{w}'")
+            raise ValueError(f"Unknown column or word: '{w}'. If it is a new column, run the GitHub workflow "
+                             "'Scrape Screener data' once so the data includes it.")
     rest = re.sub(r"[A-Za-z_][A-Za-z_0-9]*|\d+(\.\d+)?", " ", e)
     if re.search(r"[^\s+\-*/<>=!&|()]", rest) or "**" in rest:
         raise ValueError("Unsupported characters in filter")
