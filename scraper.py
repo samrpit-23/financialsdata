@@ -43,10 +43,10 @@ SECTIONS = ["quarters", "profit-loss", "balance-sheet", "cash-flow", "ratios", "
 
 # ----------------------------------------------------------------- parsing helpers
 def to_num(text):
-    """'â¹ 1,23,456' -> 123456.0 ; '12.5 %' -> 12.5 ; junk -> None"""
+    """'₹ 1,23,456' -> 123456.0 ; '12.5 %' -> 12.5 ; junk -> None"""
     if text is None:
         return None
-    t = re.sub(r"[â¹,%\s]|Cr\.", "", text)
+    t = re.sub(r"[₹,%\s]|Cr\.", "", text)
     try:
         return float(t)
     except ValueError:
@@ -86,6 +86,12 @@ def parse_company(symbol, html):
             ratios["52w High"], ratios["52w Low"] = nums
         elif nums:
             ratios[key] = nums[0]
+
+    sh_sec = soup.select_one("section#shareholding")
+    if sh_sec is not None:
+        m = re.search(r"[Pp]ledged\s+percentage[^0-9\-]{0,60}([\d.]+)\s*%", sh_sec.get_text(" ", strip=True))
+        if m:
+            ratios["Pledged Pct"] = to_num(m.group(1))
 
     peers = [a.get_text(strip=True) for a in soup.select("#peers a[href^='/market/']")]
     sector = peers[0] if peers else ""
@@ -229,6 +235,122 @@ def quarter_metrics(tables):
     }
 
 
+def _pairs(table, labels):
+    """[(column_label, value), ...] for the first matching row, excluding the TTM column."""
+    if not table:
+        return []
+    for row in table["data"]:
+        if row[0] in labels:
+            return [(c, v) for c, v in zip(table["columns"][1:], row[1:]) if str(c).upper() != "TTM"]
+    return []
+
+
+def _vals(pairs):
+    return [v for _, v in pairs]
+
+
+def _cagr(vals, n):
+    if len(vals) <= n:
+        return None
+    a, b = vals[-1 - n], vals[-1]
+    if a is None or b is None or a <= 0 or b <= 0:
+        return None
+    return round(((b / a) ** (1 / n) - 1) * 100, 1)
+
+
+def _count_up(vals, n):
+    seg = vals[-(n + 1):]
+    if len(seg) < n + 1 or any(v is None for v in seg):
+        return None
+    return sum(1 for i in range(1, len(seg)) if seg[i] > seg[i - 1])
+
+
+def _chg(vals, n):
+    if len(vals) <= n or vals[-1] is None or vals[-1 - n] is None:
+        return None
+    return round(vals[-1] - vals[-1 - n], 1)
+
+
+def _last(vals):
+    for v in reversed(vals):
+        if v is not None:
+            return v
+    return None
+
+
+def _avg(vals, n=5, min_n=3):
+    seg = [v for v in vals[-n:] if v is not None]
+    return round(sum(seg) / len(seg), 1) if len(seg) >= min_n else None
+
+
+def annual_metrics(tables):
+    pl, bs = tables.get("profit-loss"), tables.get("balance-sheet")
+    cf, rt, sh = tables.get("cash-flow"), tables.get("ratios"), tables.get("shareholding")
+
+    sales = _pairs(pl, ("Sales", "Revenue"))
+    npf = _pairs(pl, ("Net Profit",))
+    eps = _pairs(pl, ("EPS in Rs",))
+    opm = _pairs(pl, ("OPM %", "Financing Margin %"))
+    opr = _pairs(pl, ("Operating Profit", "Financing Profit"))
+    intr = _pairs(pl, ("Interest",))
+    payout = _pairs(pl, ("Dividend Payout %",))
+    borrow = _pairs(bs, ("Borrowings",))
+    eqc, res = dict(_pairs(bs, ("Equity Capital",))), dict(_pairs(bs, ("Reserves",)))
+    cfo = _pairs(cf, ("Cash from Operating Activity",))
+    roce = _pairs(rt, ("ROCE %",))
+    debtor = _pairs(rt, ("Debtor Days",))
+    inv = _pairs(rt, ("Inventory Days",))
+    promo = _pairs(sh, ("Promoters",))
+
+    out = {
+        "Sales CAGR 5Y": _cagr(_vals(sales), 5),
+        "Profit CAGR 5Y": _cagr(_vals(npf), 5),
+        "EPS CAGR 5Y": _cagr(_vals(eps), 5),
+        "Sales CAGR 3Y": _cagr(_vals(sales), 3),
+        "Profit CAGR 3Y": _cagr(_vals(npf), 3),
+        "Sales Up Years 5Y": _count_up(_vals(sales), 5),
+        "Profit Up Years 5Y": _count_up(_vals(npf), 5),
+        "OPM Chg 3Y": _chg(_vals(opm), 3),
+        "ROCE Avg 5Y": _avg(_vals(roce)),
+        "ROCE Min 5Y": min([v for v in _vals(roce)[-5:] if v is not None], default=None),
+        "Debtor Days Chg 3Y": _chg(_vals(debtor), 3),
+        "Inventory Days Chg 3Y": _chg(_vals(inv), 3),
+        "Payout Pct": _last(_vals(payout)),
+        "Promoter Holding": _last(_vals(promo)),
+        "Promoter Chg 1Y": _chg(_vals(promo), 4),
+    }
+
+    # interest coverage (latest year): 999 means no interest cost at all
+    if opr and intr:
+        o, i = opr[-1][1], intr[-1][1]
+        if o is not None and i is not None:
+            out["Interest Coverage"] = 999.0 if i == 0 and o > 0 else (round(o / i, 1) if i > 0 else None)
+
+    # debt to equity and debt trend
+    if borrow and borrow[-1][1] is not None:
+        lab, b = borrow[-1]
+        if eqc.get(lab) is not None and res.get(lab) is not None and eqc[lab] + res[lab] > 0:
+            out["Debt to Equity"] = round(b / (eqc[lab] + res[lab]), 2)
+        out["Debt Chg 3Y %"] = _pct(b, _vals(borrow)[-4]) if len(borrow) >= 4 else None
+
+    # ROE average (profit / year-end net worth)
+    roes = []
+    for lab, p in npf[-5:]:
+        if p is not None and eqc.get(lab) is not None and res.get(lab) is not None and eqc[lab] + res[lab] > 0:
+            roes.append(p / (eqc[lab] + res[lab]) * 100)
+    out["ROE Avg 5Y"] = round(sum(roes) / len(roes), 1) if len(roes) >= 3 else None
+
+    # cash flow quality
+    cfd, npd = dict(cfo), dict(npf)
+    common = [l for l, _ in npf if cfd.get(l) is not None and npd.get(l) is not None][-3:]
+    if len(common) == 3:
+        tot = sum(npd[l] for l in common)
+        out["CFO to Profit 3Y"] = round(sum(cfd[l] for l in common) / tot, 2) if tot > 0 else None
+    last5 = [v for v in _vals(cfo)[-5:] if v is not None]
+    out["CFO Positive Years 5Y"] = sum(1 for v in last5 if v > 0) if len(last5) >= 3 else None
+    return out
+
+
 def build_snapshot():
     rows = []
     for p in sorted(DETAIL_DIR.glob("*.json")):
@@ -247,6 +369,7 @@ def build_snapshot():
             "Net Profit": latest_value(tb, "profit-loss", ("Net Profit",)),
             "OPM %": latest_value(tb, "profit-loss", ("OPM %", "Financing Margin %")),
             **quarter_metrics(tb),
+            **annual_metrics(tb),
             "Updated": d.get("fetched_at", "")[:16].replace("T", " "),
         }
         rows.append(row)
